@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 export default function LandingPage() {
     return (
         <div className="bg-white text-black min-h-screen overflow-x-hidden">
@@ -25,9 +27,12 @@ export default function LandingPage() {
                         </p>
 
                         <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                            <button className="w-full sm:w-auto bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-900 transition">
+                            <NavLink
+                                to={"/register"}
+                                className="w-full sm:w-auto bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-900 transition"
+                            >
                                 Get Started
-                            </button>
+                            </NavLink>
 
                             <button className="w-full sm:w-auto border border-gray-300 px-6 py-3 rounded-xl hover:bg-gray-50 transition">
                                 Learn More
@@ -169,18 +174,19 @@ export default function LandingPage() {
             <section className="py-20 md:py-32 bg-black text-white">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
-                        Ready To Automate
+                        Automate
                         <br />
-                        Document Processing?
+                        Document Processing
                     </h2>
 
                     <p className="mt-6 text-gray-300 text-sm sm:text-base">
                         Reduce manual work and improve efficiency with AI.
                     </p>
-
-                    <button className="mt-8 w-full sm:w-auto bg-white text-black px-8 py-4 rounded-xl font-medium hover:bg-gray-100 transition">
-                        Get Started
-                    </button>
+                    <NavLink to={"/register"}>
+                        <button className="mt-8 w-full sm:w-auto bg-white text-black px-8 py-4 rounded-xl font-medium hover:bg-gray-100 transition">
+                            Get Started
+                        </button>
+                    </NavLink>
                 </div>
             </section>
         </div>
