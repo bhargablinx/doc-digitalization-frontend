@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { UploadCloud, FileText, Image, X, BookText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setDocument } from "../features/documentSlice";
 
 export default function Upload() {
     const [file, setFile] = useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -21,7 +24,8 @@ export default function Upload() {
         if (!file) return;
 
         // handling the upload and sending the id to the /upload/review/id
-        console.log(file);
+        dispatch(setDocument(file));
+        console.log("Uploaded document to redux");
 
         navigate("/upload/review/1");
     };
