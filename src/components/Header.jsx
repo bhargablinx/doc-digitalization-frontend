@@ -2,13 +2,14 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // just for testing
+    const [isLoggedIn, setIsLoggedIn] = useState(true); // just for testing
 
     const navLinks = isLoggedIn
         ? [
               { to: "/dashboard", label: "Dashboard" },
               { to: "/upload", label: "Upload" },
               { to: "/profile", label: "Profile" },
+              { to: "/logout", label: "Logout" },
           ]
         : [
               { to: "/", label: "Home" },
