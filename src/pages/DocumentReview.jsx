@@ -1,12 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "../components/Loading";
+import Preview from "../components/Preview";
+import { useNavigate, Navigate } from "react-router-dom";
+import {
+    startExtraction,
+    clearDocument,
+    setDocData,
+    extractionFailed,
+} from "../features/documentSlice";
 
 export default function DocumentReview() {
-    const [formData, setFormData] = useState({
-        consumer_name: "John Doe",
-        consumer_no: "12345",
-        address: "Guwahati",
-        mobile: "9876543210",
-    });
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { document, docData, extracting, error } = useSelector(
+        (state) => state.document,
+    );
+
+    // fake function: in future use creatAsyncThunk for better error handling
+    const extractDocument = async () => {
+        // a fake scenario where user uploads a document and
+        // is return will extracted data
+        // this will be later updated with real
+        // information extraction with AI and OCR
+        try {
+            dispatch(startExtraction());
+
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+
+            const extractedData = {
+                consumer_name: "Bhargab Bhuyan",
+                consumer_no: "123456789",
+                address: "Guwahati",
+                mobile: 9876543210,
+            };
+
+            dispatch(setDocData(extractedData));
+            setFormData(extractedData);
+        } catch (error) {
+            dispatch(extractionFailed(error.message));
+        }
+    };
+
+    const [formData, setFormData] = useState({});
 
     const handleChange = (key, value) => {
         setFormData((prev) => ({
@@ -21,7 +57,26 @@ export default function DocumentReview() {
 
     const handleCancel = () => {
         console.log("Operation Cancelled");
+        // clean up upload and cancel and navigate to
+        dispatch(clearDocument());
+        navigate("/");
     };
+
+    useEffect(() => {
+        extractDocument();
+    }, []);
+
+    if (!document) {
+        return <Navigate to="/upload" replace />;
+    }
+
+    if (extracting) {
+        return <Loading message="Extracting information..." />;
+    }
+
+    if (!docData) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -37,17 +92,13 @@ export default function DocumentReview() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Document Preview */}
+                    {/* Preview */}
                     <div className="bg-white rounded-2xl shadow-sm border p-4">
                         <h2 className="text-lg font-semibold mb-4">
                             Uploaded Document
                         </h2>
 
-                        <div className="aspect-[3/4] rounded-xl border bg-gray-100 flex items-center justify-center">
-                            <span className="text-gray-500">
-                                PDF / Image Preview Here
-                            </span>
-                        </div>
+                        <Preview file={document} />
                     </div>
 
                     {/* Extracted Data */}
