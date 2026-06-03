@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { UploadCloud, FileText, Image, X, BookText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Upload() {
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -18,7 +20,10 @@ export default function Upload() {
     const handleUpload = () => {
         if (!file) return;
 
+        // handling the upload and sending the id to the /upload/review/id
         console.log(file);
+
+        navigate("/upload/review/1");
     };
 
     return (
