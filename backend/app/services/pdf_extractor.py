@@ -1,4 +1,4 @@
-import pdfplumber
+import pdfplumber 
 
 def extract_pdf_text(file_path):
     text = ""

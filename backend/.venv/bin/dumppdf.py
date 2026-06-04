@@ -1,4 +1,4 @@
-#!/home/neel/voltverify/backend/.venv/bin/python
+#!/home/neel/voltverify/backend/.venv/bin/python3
 """Extract pdf structure in XML format"""
 
 import logging

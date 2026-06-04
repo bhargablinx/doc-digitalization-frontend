@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile
 from app.services.pdf_extractor import extract_pdf_text
+from app.services.ocr_extractor import extract_image_text
 
 import shutil
 
@@ -16,7 +17,10 @@ async def upload_file(file: UploadFile):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    text = extract_pdf_text(file_path) 
+    if file.filename.endswith(".pdf"):
+        text = extract_pdf_text(file_path)
+    else:
+        text = extract_image_text(file_path)
     
     return {
         "message": "File uploaded successfully",
