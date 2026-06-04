@@ -4,8 +4,8 @@ import shutil
 from app.services.pdf_extractor import extract_pdf_text
 from app.services.ocr_extractor import extract_image_text
 
-from app.services.pdf_parser import parse_pdf_text
-from app.services.ocr_parser import parse_ocr_text
+from backend.app.parsers.pdf_parser import parse_pdf_text
+from backend.app.parsers.ocr_parser import parse_ocr_text
 
 app = FastAPI()
 
