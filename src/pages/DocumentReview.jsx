@@ -8,41 +8,42 @@ import {
     clearDocument,
     setDocData,
     extractionFailed,
+    stopsExtraction,
 } from "../features/documentSlice";
+import axios from "axios";
 
 export default function DocumentReview() {
+    const [formData, setFormData] = useState({});
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { document, docData, extracting, error } = useSelector(
         (state) => state.document,
     );
 
-    // fake function: in future use creatAsyncThunk for better error handling
     const extractDocument = async () => {
-        // a fake scenario where user uploads a document and
-        // is return will extracted data
-        // this will be later updated with real
-        // information extraction with AI and OCR
         try {
             dispatch(startExtraction());
 
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            const formData = new FormData();
+            formData.append("file", document);
 
-            const extractedData = {
-                consumer_name: "Bhargab Bhuyan",
-                consumer_no: "123456789",
-                address: "Guwahati",
-                mobile: 9876543210,
-            };
+            const response = await axios.post(
+                "http://127.0.0.1:8000/extract",
+                formData,
+            );
 
+            const extractedData = response.data.data;
+
+            console.log(extractedData);
             dispatch(setDocData(extractedData));
             setFormData(extractedData);
         } catch (error) {
+            console.log(error.response?.data);
             dispatch(extractionFailed(error.message));
+        } finally {
+            dispatch(stopsExtraction());
         }
     };
-
-    const [formData, setFormData] = useState({});
 
     const handleChange = (key, value) => {
         setFormData((prev) => ({
